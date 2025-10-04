@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { User } from "./types/user";
 import { createClient } from "@/lib/supabase/client";
+import { TableDemo } from "@/components/table-demo";
 
 function TestFirst() {
   return (
@@ -11,8 +12,8 @@ function TestFirst() {
       <div className="size-9 bg-yellow-500 grid border rounded-full mx-auto mb-2">
         <p className="m-auto">1</p>
       </div>
-      <p>s23037@gsm.hs.kr</p>
-      <p>21점</p>
+      <p className="text-base">s23037@gsm.hs.kr</p>
+      <p className="text-sm text-neutral-400">21점</p>
     </div>
   );
 }
@@ -23,8 +24,8 @@ function TestSecond() {
       <div className="size-9 bg-neutral-500 grid border rounded-full mx-auto mb-2">
         <p className="m-auto">2</p>
       </div>
-      <p>s23037@gsm.hs.kr</p>
-      <p>21점</p>
+      <p className="text-base">s23037@gsm.hs.kr</p>
+      <p className="text-sm text-neutral-400">21점</p>
     </div>
   );
 }
@@ -35,8 +36,8 @@ function TestThird() {
       <div className="size-9 bg-amber-800 grid border rounded-full mx-auto mb-2">
         <p className="m-auto">3</p>
       </div>
-      <p>s23037@gsm.hs.kr</p>
-      <p>21점</p>
+      <p className="text-base">s23037@gsm.hs.kr</p>
+      <p className="text-sm text-neutral-400">21점</p>
     </div>
   );
 }

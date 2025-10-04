@@ -1,19 +1,16 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import LocalFont from "next/font/local";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import Link from "next/link";
 import { Home, User2 } from "lucide-react";
 import { LogoutButton } from "@/components/logout-button";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const pretendard = LocalFont({
+  src: "../public/fonts/PretendardVariable.woff2",
+  variable: "--font-pretendard",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -28,8 +25,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.className} antialiased flex bg-gray-400`}>
-        <div className="max-w-[430px] relative w-full mx-auto bg-blue-950 h-[100dvh] flex flex-col">
+      <body className={`${pretendard.className} antialiased flex bg-gray-400`}>
+        <div className="max-w-[430px] relative w-full mx-auto bg-[#101c3e] h-[100dvh] flex flex-col">
           <Toaster position="top-right" />
           <div className="flex mb-auto py-2 h-min absolute w-full z-10">
             <div className="mx-auto flex items-center gap-x-1">
