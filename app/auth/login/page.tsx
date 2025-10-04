@@ -33,7 +33,7 @@ export default function Page({
   }, []);
 
   return (
-    <div className="grid h-screen">
+    <div className="grid h-full">
       <div className="m-auto">
         <GoogleLoginButton onClick={onLogin} />
       </div>
