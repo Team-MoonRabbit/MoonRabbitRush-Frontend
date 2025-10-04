@@ -26,6 +26,9 @@ export default function Page({
   const onLogin = useCallback(async () => {
     await createClient().auth.signInWithOAuth({
       provider: "google",
+      options: {
+        redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/api/auth/callback`,
+      },
     });
   }, []);
 
