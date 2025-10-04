@@ -27,7 +27,7 @@ export default function Page({
     await createClient().auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/api/auth/callback`,
+        redirectTo: `https://moon-rabbit-rush-frontend.vercel.app/api/auth/callback`,
       },
     });
 
