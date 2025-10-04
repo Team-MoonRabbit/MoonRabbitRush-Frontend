@@ -27,7 +27,7 @@ export default function Page({
     await createClient().auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `http://localhost:3000/api/auth/callback`,
+        redirectTo: `${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/auth/callback`,
       },
     });
 
