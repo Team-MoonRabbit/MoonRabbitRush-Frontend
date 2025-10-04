@@ -26,9 +26,9 @@ export default function Page({
   const onLogin = useCallback(async () => {
     await createClient().auth.signInWithOAuth({
       provider: "google",
-      options: {
-        redirectTo: `https://moon-rabbit-rush-frontend.vercel.app/api/auth/callback`,
-      },
+      // options: {
+      //   redirectTo: `https://moon-rabbit-rush-frontend.vercel.app/api/auth/callback`,
+      // },
     });
 
     redirect("/");
