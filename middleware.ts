@@ -19,15 +19,14 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(new URL("/auth/login", request.url));
     } else if (accessToken === undefined) {
       try {
-        const { data } = await serverInstance.post(
-          `/auth/reissue`,
-          {},
-          {
-            headers: {
-              "Refresh-Token": `Bearer ${refreshToken}`,
-            },
-          }
-        );
+        const { data } = await serverInstance.post(`/auth/reissue`, undefined, {
+          headers: {
+            "Refresh-Token": `Bearer ${refreshToken}`,
+          },
+        });
+
+        cookieStore.delete("accessToken");
+        cookieStore.delete("refreshToken");
 
         cookieStore.set("accessToken", data.accessToken, {
           expires: new Date(data.accessTokenExpiredAt),
