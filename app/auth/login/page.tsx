@@ -1,7 +1,6 @@
 "use client";
 
 import GoogleLoginButton from "@/components/google-login-button";
-import { createClient } from "@/lib/supabase/client";
 import axios from "axios";
 import { redirect } from "next/navigation";
 import { useCallback, useEffect } from "react";
