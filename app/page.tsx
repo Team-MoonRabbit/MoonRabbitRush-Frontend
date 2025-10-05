@@ -1,10 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { User } from "./types/user";
-import { createClient } from "@/lib/supabase/client";
-import { TableDemo } from "@/components/table-demo";
 
 function TestFirst() {
   return (

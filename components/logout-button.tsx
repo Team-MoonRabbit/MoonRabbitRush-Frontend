@@ -1,17 +1,24 @@
 "use client";
 
-import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { DoorClosed } from "lucide-react";
+import axios from "axios";
 
 export function LogoutButton() {
   const router = useRouter();
 
   const logout = async () => {
-    const supabase = createClient();
-    await supabase.auth.signOut();
+    await axios.post(`/api/auth/logout`);
     router.push("/auth/login");
   };
 
-  return <DoorClosed onClick={logout}>Logout</DoorClosed>;
+  return (
+    <div
+      onClick={logout}
+      className="border bg-white py-2 px-4 rounded-full opacity-50 cursor-pointer flex gap-x-2 items-center"
+    >
+      <DoorClosed />
+      <p className="text-sm">로그아웃</p>
+    </div>
+  );
 }

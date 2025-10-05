@@ -2,6 +2,7 @@
 
 import GoogleLoginButton from "@/components/google-login-button";
 import { createClient } from "@/lib/supabase/client";
+import axios from "axios";
 import { redirect } from "next/navigation";
 import { useCallback, useEffect } from "react";
 import { toast } from "sonner";
@@ -24,12 +25,15 @@ export default function Page({
   }, [searchParams]);
 
   const onLogin = useCallback(async () => {
-    await createClient().auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/api/auth/callback`,
-      },
-    });
+    const { data } = await axios(
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/auth/google/url`,
+      {
+        headers: {
+          "ngrok-skip-browser-warning": "true",
+        },
+      }
+    );
+    redirect(data);
   }, []);
 
   return (

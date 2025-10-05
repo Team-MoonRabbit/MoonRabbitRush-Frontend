@@ -1,9 +1,11 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import axios from "axios";
+import { cookies } from "next/headers";
 
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
+  const cookieStore = await cookies();
 
   let next = searchParams.get("next") ?? "/";
   if (!next.startsWith("/")) {
@@ -11,28 +13,25 @@ export async function GET(request: Request) {
   }
 
   if (code) {
-    const supabase = await createClient();
-    const { data, error } = await supabase.auth.exchangeCodeForSession(code);
+    try {
+      const { data } = await axios.post(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/auth/google/login?code=${code}`
+      );
 
-    if (!data.user?.email?.endsWith("@gsm.hs.kr")) {
-      await supabase.auth.signOut();
-      return NextResponse.redirect(`${origin}${next}?error=invalid-email`);
-    }
+      cookieStore.set("accessToken", data.accessToken, {
+        expires: new Date(data.accessTokenExpiredAt),
+      });
+      cookieStore.set("refreshToken", data.refreshToken, {
+        expires: new Date(data.refreshTokenExpiredAt),
+      });
 
-    if (!error) {
-      const forwardedHost = request.headers.get("x-forwarded-host"); // original origin before load balancer
-      const isLocalEnv = process.env.NODE_ENV === "development";
-      if (isLocalEnv) {
-        // we can be sure that there is no load balancer in between, so no need to watch for X-Forwarded-Host
-        return NextResponse.redirect(`${origin}${next}`);
-      } else if (forwardedHost) {
-        return NextResponse.redirect(`https://${forwardedHost}${next}`);
-      } else {
-        return NextResponse.redirect(`${origin}${next}`);
+      return NextResponse.redirect(`${origin}`);
+    } catch (e) {
+      if (axios.isAxiosError(e)) {
+        console.log(e.response?.data);
       }
     }
   }
 
-  // return the user to an error page with instructions
   return NextResponse.redirect(`${origin}/auth/auth-code-error`);
 }
