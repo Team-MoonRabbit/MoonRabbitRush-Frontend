@@ -26,7 +26,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${pretendard.className} antialiased flex bg-gray-400`}>
-        <div className="max-w-[430px] relative w-full mx-auto bg-[#101c3e] h-[100dvh] flex flex-col">
+        <div className="max-w-[480px] relative w-full mx-auto bg-[#101c3e] h-[100dvh] flex flex-col">
           <Toaster position="top-right" />
           <div className="flex mb-auto py-2 h-min absolute w-full z-10">
             <div className="mx-auto flex items-center gap-x-1">
