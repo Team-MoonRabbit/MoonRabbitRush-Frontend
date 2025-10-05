@@ -44,7 +44,7 @@ export async function middleware(request: NextRequest) {
           expires: new Date(data.refreshTokenExpiredAt),
         });
 
-        return response;
+        return nextResponse;
       } catch (e) {
         if (axios.isAxiosError(e)) {
           console.log(e.response?.data);
