@@ -22,6 +22,7 @@ export async function middleware(request: NextRequest) {
             headers: {
               "Refresh-Token": `Bearer ${refreshToken}`,
               "ngrok-skip-browser-warning": "true",
+              "Content-Type": "application/json",
             },
           }
         );
