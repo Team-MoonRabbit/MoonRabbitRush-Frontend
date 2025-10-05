@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import axios from "axios";
 import { cookies } from "next/headers";
-import { serverInstance } from "@/lib/serverInstance";
 
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
@@ -27,9 +26,17 @@ export async function GET(request: Request) {
       const data = await response.json();
 
       cookieStore.set("accessToken", data.accessToken, {
+        httpOnly: true,
+        path: "/",
+        sameSite: "lax",
+        secure: process.env.NODE_ENV === "production",
         expires: new Date(data.accessTokenExpiredAt),
       });
       cookieStore.set("refreshToken", data.refreshToken, {
+        httpOnly: true,
+        path: "/",
+        sameSite: "lax",
+        secure: process.env.NODE_ENV === "production",
         expires: new Date(data.refreshTokenExpiredAt),
       });
 
