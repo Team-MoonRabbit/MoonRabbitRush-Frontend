@@ -15,9 +15,6 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(new URL("/auth/login", request.url));
     }
 
-    console.log(accessToken);
-    console.log(refreshToken);
-
     if (!accessToken && refreshToken) {
       try {
         const response = await fetch(
@@ -25,15 +22,13 @@ export async function middleware(request: NextRequest) {
           {
             method: "POST",
             headers: {
-              "Refresh-Token": `Bearer ${refreshToken}`,
+              "Refresh-Token": `${refreshToken}`,
               "ngrok-skip-browser-warning": "true",
               "Content-Type": "application/json",
             },
           }
         );
         const data = await response.json();
-
-        console.log(response.statusText);
 
         console.log(data);
 
