@@ -6,3 +6,7 @@ export const serverInstance = axios.create({
     "ngrok-skip-browser-warning": "true",
   },
 });
+
+await fetch("", {
+  method: "POST",
+});

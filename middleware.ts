@@ -16,22 +16,28 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(new URL("/auth/login", request.url));
     } else if (!accessToken && refreshToken) {
       try {
-        const { data } = await serverInstance.post(`/auth/reissue`, undefined, {
-          headers: {
-            "Refresh-Token": `Bearer ${refreshToken}`,
-          },
-        });
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_SERVER_URL}/auth/reissue`,
+          {
+            method: "POST",
+            headers: {
+              "Refresh-Token": `Bearer ${refreshToken}`,
+              "ngrok-skip-browser-warning": "true",
+            },
+          }
+        );
+        const data = await response.json();
 
-        const response = NextResponse.next();
+        const nextResponse = NextResponse.next();
 
-        response.cookies.set("accessToken", data.accessToken, {
+        nextResponse.cookies.set("accessToken", data.accessToken, {
           httpOnly: true,
           path: "/",
           sameSite: "lax",
           secure: process.env.NODE_ENV === "production",
           expires: new Date(data.accessTokenExpiredAt),
         });
-        response.cookies.set("refreshToken", data.refreshToken, {
+        nextResponse.cookies.set("refreshToken", data.refreshToken, {
           httpOnly: true,
           path: "/",
           sameSite: "lax",
