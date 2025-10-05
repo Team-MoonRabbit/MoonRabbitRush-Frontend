@@ -27,11 +27,15 @@ export async function middleware(request: NextRequest) {
         response.cookies.set("accessToken", data.accessToken, {
           httpOnly: true,
           path: "/",
+          sameSite: "lax",
+          secure: process.env.NODE_ENV === "production",
           expires: new Date(data.accessTokenExpiredAt),
         });
         response.cookies.set("refreshToken", data.refreshToken, {
           httpOnly: true,
           path: "/",
+          sameSite: "lax",
+          secure: process.env.NODE_ENV === "production",
           expires: new Date(data.refreshTokenExpiredAt),
         });
 
