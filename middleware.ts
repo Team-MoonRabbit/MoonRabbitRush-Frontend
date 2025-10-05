@@ -33,6 +33,8 @@ export async function middleware(request: NextRequest) {
         );
         const data = await response.json();
 
+        console.log(response.statusText);
+
         console.log(data);
 
         const nextResponse = NextResponse.next();
