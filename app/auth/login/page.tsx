@@ -32,7 +32,7 @@ export default function Page({
         },
       }
     );
-    const data = await response.json();
+    const data = await response.text();
     redirect(data);
   }, []);
 
