@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import axios from "axios";
 import { cookies } from "next/headers";
+import { serverInstance } from "@/lib/serverInstance";
 
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
@@ -14,8 +15,8 @@ export async function GET(request: Request) {
 
   if (code) {
     try {
-      const { data } = await axios.post(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/auth/google/login?code=${code}`
+      const { data } = await serverInstance.post(
+        `/auth/google/login?code=${code}`
       );
 
       cookieStore.set("accessToken", data.accessToken, {

@@ -1,6 +1,7 @@
 import axios from "axios";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
+import { serverInstance } from "./lib/serverInstance";
 
 export async function middleware(request: NextRequest) {
   const matches = ["/auth/login", "/api/auth/callback", "/error"];
@@ -18,8 +19,8 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(new URL("/auth/login", request.url));
     } else if (accessToken === undefined) {
       try {
-        const { data } = await axios.post(
-          `${process.env.NEXT_PUBLIC_SERVER_URL}/auth/reissue`,
+        const { data } = await serverInstance.post(
+          `/auth/reissue`,
           {},
           {
             headers: {

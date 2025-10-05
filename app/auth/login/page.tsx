@@ -1,6 +1,7 @@
 "use client";
 
 import GoogleLoginButton from "@/components/google-login-button";
+import { serverInstance } from "@/lib/serverInstance";
 import axios from "axios";
 import { redirect } from "next/navigation";
 import { useCallback, useEffect } from "react";
@@ -24,14 +25,7 @@ export default function Page({
   }, [searchParams]);
 
   const onLogin = useCallback(async () => {
-    const { data } = await axios(
-      `${process.env.NEXT_PUBLIC_SERVER_URL}/auth/google/url`,
-      {
-        headers: {
-          "ngrok-skip-browser-warning": "true",
-        },
-      }
-    );
+    const { data } = await serverInstance(`/auth/google/url`);
     redirect(data);
   }, []);
 
