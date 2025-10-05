@@ -19,14 +19,16 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(new URL("/auth/login", request.url));
     } else if (accessToken === undefined) {
       try {
-        const { data } = await serverInstance.post(`/auth/reissue`, undefined, {
-          headers: {
-            "Refresh-Token": `Bearer ${refreshToken}`,
-          },
-        });
-
-        cookieStore.delete("accessToken");
-        cookieStore.delete("refreshToken");
+        const { data } = await axios.post(
+          `${process.env.NEXT_PUBLIC_SERVER_URL}/auth/reissue`,
+          undefined,
+          {
+            headers: {
+              "Refresh-Token": `Bearer ${refreshToken}`,
+              "ngrok-skip-browser-warning": "true",
+            },
+          }
+        );
 
         cookieStore.set("accessToken", data.accessToken, {
           expires: new Date(data.accessTokenExpiredAt),
