@@ -1,6 +1,5 @@
 import axios from "axios";
 import { NextRequest, NextResponse } from "next/server";
-import { serverInstance } from "./lib/serverInstance";
 
 export async function middleware(request: NextRequest) {
   const matches = ["/auth/login", "/api/auth/callback", "/error"];

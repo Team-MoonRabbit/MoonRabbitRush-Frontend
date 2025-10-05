@@ -15,9 +15,16 @@ export async function GET(request: Request) {
 
   if (code) {
     try {
-      const { data } = await serverInstance.post(
-        `/auth/google/login?code=${code}`
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/auth/google/login?code=${code}`,
+        {
+          method: "POST",
+          headers: {
+            "ngrok-skip-browser-warning": "true",
+          },
+        }
       );
+      const data = await response.json();
 
       cookieStore.set("accessToken", data.accessToken, {
         expires: new Date(data.accessTokenExpiredAt),
