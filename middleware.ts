@@ -30,7 +30,7 @@ export async function middleware(request: NextRequest) {
         );
         const data = await response.json();
 
-        console.log(data);
+        console.log("재발급: ", data);
 
         const nextResponse = NextResponse.next();
 
