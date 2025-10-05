@@ -15,6 +15,9 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(new URL("/auth/login", request.url));
     }
 
+    console.log(accessToken);
+    console.log(refreshToken);
+
     if (!accessToken && refreshToken) {
       try {
         const response = await fetch(
@@ -29,6 +32,8 @@ export async function middleware(request: NextRequest) {
           }
         );
         const data = await response.json();
+
+        console.log(data);
 
         const nextResponse = NextResponse.next();
 
