@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { JwtResponse } from "./app/types/jwt";
-import { ResponseCookies } from "@edge-runtime/cookies";
-import next from "next";
 
 function applySetCookie(req: NextRequest, res: NextResponse) {
   const setCookies = res.cookies.getAll();

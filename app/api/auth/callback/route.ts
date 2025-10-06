@@ -23,7 +23,7 @@ export async function GET(request: Request) {
       );
       const data: JwtResponse = await response.json();
 
-      const nextResponse = NextResponse.redirect(origin);
+      const nextResponse = NextResponse.redirect(new URL("/", request.url));
 
       nextResponse.cookies.set("accessToken", data.accessToken, {
         httpOnly: true,
