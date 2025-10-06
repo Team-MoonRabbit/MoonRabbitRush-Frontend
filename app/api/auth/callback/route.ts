@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
 import axios from "axios";
 import { cookies } from "next/headers";
+import { JwtResponse } from "@/app/types/jwt";
 
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
-  const cookieStore = await cookies();
 
   let next = searchParams.get("next") ?? "/";
   if (!next.startsWith("/")) {
@@ -23,24 +23,24 @@ export async function GET(request: Request) {
           },
         }
       );
-      const data = await response.json();
+      const data: JwtResponse = await response.json();
 
-      cookieStore.set("accessToken", data.accessToken, {
+      const nextResponse = NextResponse.redirect(origin);
+
+      nextResponse.cookies.set("accessToken", data.accessToken, {
         httpOnly: true,
-        path: "/",
         sameSite: "lax",
         secure: process.env.NODE_ENV === "production",
         expires: new Date(data.accessTokenExpiredAt),
       });
-      cookieStore.set("refreshToken", data.refreshToken, {
+      nextResponse.cookies.set("refreshToken", data.refreshToken, {
         httpOnly: true,
-        path: "/",
         sameSite: "lax",
         secure: process.env.NODE_ENV === "production",
         expires: new Date(data.refreshTokenExpiredAt),
       });
 
-      return NextResponse.redirect(`${origin}`);
+      return nextResponse;
     } catch (e) {
       if (axios.isAxiosError(e)) {
         console.log(e.response?.data);

@@ -1,5 +1,6 @@
 import axios from "axios";
 import { NextRequest, NextResponse } from "next/server";
+import { JwtResponse } from "./app/types/jwt";
 
 export async function middleware(request: NextRequest) {
   const accessToken = request.cookies.get("accessToken")?.value;
@@ -22,9 +23,7 @@ export async function middleware(request: NextRequest) {
           },
         }
       );
-      const data = await response.json();
-
-      console.log("재발급: ", data);
+      const data: JwtResponse = await response.json();
 
       const nextResponse = NextResponse.next();
 
