@@ -8,6 +8,14 @@ export async function middleware(request: NextRequest) {
     const accessToken = request.cookies.get("accessToken")?.value;
     const refreshToken = request.cookies.get("refreshToken")?.value;
 
+    if (
+      accessToken &&
+      refreshToken &&
+      request.nextUrl.pathname === "/auth/login"
+    ) {
+      return NextResponse.redirect(new URL("/", request.url));
+    }
+
     if (!accessToken && !refreshToken) {
       return NextResponse.redirect(new URL("/auth/login", request.url));
     }
@@ -62,6 +70,6 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    "/((?!error|api/auth/callback|auth/login|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    "/((?!error|api/auth/callback|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
 };
