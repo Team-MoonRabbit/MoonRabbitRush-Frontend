@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 function TestFirst() {
   return (
@@ -75,11 +76,14 @@ export default function Home() {
         <Test index={13} />
       </div>
       <footer className="text-center py-2 mt-auto">
-        <Link href={"/game"}>
-          <button className="w-full py-3 bg-amber-900 text-white rounded-md">
-            게임 시작하기
-          </button>
-        </Link>
+        <button
+          onClick={() => {
+            redirect("/game");
+          }}
+          className="w-full py-3 bg-amber-900 text-white rounded-md"
+        >
+          게임 시작하기
+        </button>
         <p className="text-xs text-neutral-200 mt-4">
           © 2025. Team MoonRabbit All rights reserved.
         </p>
