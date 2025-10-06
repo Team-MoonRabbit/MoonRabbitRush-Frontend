@@ -17,15 +17,13 @@ export async function middleware(request: NextRequest) {
         {
           method: "POST",
           headers: {
-            "Refresh-Token": `Bearer ${refreshToken}`,
+            "Refresh-Token": `${refreshToken}`,
             "ngrok-skip-browser-warning": "true",
             "Content-Type": "application/json",
           },
         }
       );
       const data: JwtResponse = await response.json();
-
-      console.log(data);
 
       const headers = new Headers();
       const responseCookies = new ResponseCookies(headers);
@@ -43,16 +41,11 @@ export async function middleware(request: NextRequest) {
         expires: new Date(data.refreshTokenExpiredAt),
       });
 
-      console.log(
-        NextResponse.next({
-          headers: headers,
-        })
-      );
-
       return NextResponse.next({
         headers: headers,
       });
     } catch (e) {
+      console.log(e);
       return NextResponse.redirect(new URL("/auth/login", request.url));
     }
   }
