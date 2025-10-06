@@ -15,7 +15,10 @@ export async function encryptText(text: string) {
     let encrypted = cipher.update(text, "utf8", "base64");
     encrypted += cipher.final("base64");
 
-    return encrypted;
+    return {
+      score: encrypted,
+      iv: iv.toString("base64"),
+    };
   } catch (e) {
     console.log(e);
   }
