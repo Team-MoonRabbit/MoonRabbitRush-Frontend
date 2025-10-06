@@ -40,9 +40,6 @@ export default function ProtectedPage() {
           body: JSON.stringify({
             score: encryptedScore,
           }),
-          headers: {
-            "Content-Type": "application/json",
-          },
         });
 
         // TODO

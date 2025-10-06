@@ -12,6 +12,7 @@ export async function POST(request: NextRequest) {
         headers: {
           Authorization: `Bearer ${accessToken}`,
           "ngrok-skip-browser-warning": "true",
+          "Content-Type": "application/json",
         },
       });
     }
