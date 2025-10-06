@@ -30,14 +30,12 @@ export async function middleware(request: NextRequest) {
 
       nextResponse.cookies.set("accessToken", data.accessToken, {
         httpOnly: true,
-        path: "/",
         sameSite: "lax",
         secure: process.env.NODE_ENV === "production",
         expires: new Date(data.accessTokenExpiredAt),
       });
       nextResponse.cookies.set("refreshToken", data.refreshToken, {
         httpOnly: true,
-        path: "/",
         sameSite: "lax",
         secure: process.env.NODE_ENV === "production",
         expires: new Date(data.refreshTokenExpiredAt),
@@ -59,5 +57,4 @@ export const config = {
   matcher: [
     "/((?!error|api/auth/callback|auth/login|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
-  runtime: "nodejs",
 };
