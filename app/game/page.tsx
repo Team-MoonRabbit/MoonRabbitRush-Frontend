@@ -31,7 +31,6 @@ export default function ProtectedPage() {
       if (e.data?.type === "GAME_OVER_JSON") {
         const data = JSON.parse(e.data.payload);
         const score = Number(data.score);
-        console.log(score + "asdkflhasjklfh");
 
         const encryptedScore = await encryptText(score.toString());
         await fetch(`/api/game/score`, {

@@ -17,6 +17,15 @@ export async function POST(request: NextRequest) {
     }
   } catch (e) {
     console.log(e);
+    return NextResponse.json(
+      { success: false },
+      {
+        status: 500,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
   }
 
   return NextResponse.json({ success: true });
