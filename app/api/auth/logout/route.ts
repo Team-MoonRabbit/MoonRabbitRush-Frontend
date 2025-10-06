@@ -3,10 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(request: NextRequest) {
   const refreshToken = request.cookies.get("refreshToken")?.value;
 
-  const response = NextResponse.next();
-
-  response.cookies.delete("accessToken");
-  response.cookies.delete("refreshToken");
+  const response = NextResponse.redirect(new URL("/auth/login", request.url));
 
   try {
     if (refreshToken) {
@@ -19,6 +16,9 @@ export async function POST(request: NextRequest) {
       });
     }
   } finally {
+    response.cookies.delete("accessToken");
+    response.cookies.delete("refreshToken");
+
     return response;
   }
 }
