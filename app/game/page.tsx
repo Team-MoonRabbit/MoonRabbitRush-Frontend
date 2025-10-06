@@ -2,13 +2,11 @@
 
 import ProgressBar from "@/components/progress-bar";
 import { encryptText } from "@/app/game/actions";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Unity, useUnityContext } from "react-unity-webgl";
 
 declare global {
-  interface Window {
-    OnGameOverJSON?: (score: number) => void;
-  }
+  interface Window {}
 }
 
 export default function ProtectedPage() {
@@ -27,29 +25,6 @@ export default function ProtectedPage() {
   });
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      const response = await fetch("/api/game/ranking", {
-        method: "GET",
-      });
-      const data = await response.json();
-
-      sendMessage(
-        "GameManager",
-        "SetRankingScore",
-        JSON.stringify({
-          first_score: data.at(0)?.score,
-          second_score: data.at(1)?.score,
-          third_score: data.at(2)?.score,
-        })
-      );
-    };
-
-    if (isLoaded) {
-      fetchUsers();
-    }
-  }, [isLoaded]);
-
-  useEffect(() => {
     const onMsg = async (e: MessageEvent) => {
       if (e.data?.type === "GAME_OVER_JSON") {
         const data = JSON.parse(e.data.payload);
@@ -64,13 +39,48 @@ export default function ProtectedPage() {
             iv: encryptedScore?.iv,
           }),
         });
-
-        sendMessage("GameManager", "SetMaxScore", "1000000");
       }
     };
 
+    const onStart = (e: CustomEvent) => {
+      async () => {
+        const response = await fetch("/api/game/ranking", {
+          method: "GET",
+        });
+        const data = await response.json();
+
+        sendMessage(
+          "GameManager",
+          "SetRankingScore",
+          JSON.stringify({
+            first_score: data.at(0)?.score,
+            second_score: data.at(1)?.score,
+            third_score: data.at(2)?.score,
+          })
+        );
+      };
+    };
+
+    const onEnd = (e: CustomEvent) => {
+      async () => {
+        const response = await fetch("/api/game/me", {
+          method: "GET",
+        });
+        const data = await response.json();
+
+        sendMessage("GameManager", "SetMaxScore", data.score);
+      };
+    };
+
+    window.addEventListener("unity_game_end", onEnd as EventListener);
+    window.addEventListener("unity_game_start", onStart as EventListener);
     window.addEventListener("message", onMsg);
-    return () => window.removeEventListener("message", onMsg);
+
+    return () => {
+      window.removeEventListener("unity_game_end", onEnd as EventListener);
+      window.removeEventListener("unity_game_start", onStart as EventListener);
+      window.removeEventListener("message", onMsg);
+    };
   }, []);
 
   return (
