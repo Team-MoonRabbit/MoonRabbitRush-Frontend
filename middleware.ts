@@ -1,6 +1,27 @@
 import { NextRequest, NextResponse } from "next/server";
 import { JwtResponse } from "./app/types/jwt";
 import { ResponseCookies } from "@edge-runtime/cookies";
+import next from "next";
+
+function applySetCookie(req: NextRequest, res: NextResponse) {
+  const setCookies = res.cookies.getAll();
+  const newReqHeaders = new Headers(req.headers);
+
+  for (const cookie of setCookies) {
+    newReqHeaders.append("cookie", `${cookie.name}=${cookie.value}`);
+  }
+
+  const dummyRes = NextResponse.next({ request: { headers: newReqHeaders } });
+
+  dummyRes.headers.forEach((value, key) => {
+    if (
+      key === "x-middleware-override-headers" ||
+      key.startsWith("x-middleware-request-")
+    ) {
+      res.headers.set(key, value);
+    }
+  });
+}
 
 export async function middleware(request: NextRequest) {
   try {
@@ -24,33 +45,24 @@ export async function middleware(request: NextRequest) {
         }
       );
       const data: JwtResponse = await response.json();
+      const nextResponse = NextResponse.next();
 
-      const headers = new Headers();
-      const responseCookies = new ResponseCookies(headers);
-
-      console.log(data.accessToken);
-      console.log(data.accessTokenExpiredAt);
-      responseCookies.set("accessToken", data.accessToken, {
+      nextResponse.cookies.set("accessToken", data.accessToken, {
         httpOnly: true,
         sameSite: "strict",
         secure: process.env.NODE_ENV === "production",
         expires: new Date(data.accessTokenExpiredAt),
       });
-
-      console.log(data.refreshToken);
-      console.log(data.refreshTokenExpiredAt);
-      responseCookies.set("refreshToken", data.refreshToken, {
+      nextResponse.cookies.set("refreshToken", data.refreshToken, {
         httpOnly: true,
         sameSite: "strict",
         secure: process.env.NODE_ENV === "production",
         expires: new Date(data.refreshTokenExpiredAt),
       });
 
-      console.log(headers.getSetCookie());
+      applySetCookie(request, nextResponse);
 
-      return NextResponse.next({
-        headers: headers,
-      });
+      return nextResponse;
     }
   } catch (e) {
     console.log(e);
