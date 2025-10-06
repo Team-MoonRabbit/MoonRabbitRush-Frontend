@@ -26,7 +26,9 @@ export async function GET(request: Request) {
       );
       const data: JwtResponse = await response.json();
 
-      const nextResponse = NextResponse.redirect(new URL("/", request.url));
+      const nextResponse = NextResponse.redirect(
+        new URL("/auth/login?next=/", request.url)
+      );
       dayjs.extend(utc);
       dayjs.extend(timezone);
 
