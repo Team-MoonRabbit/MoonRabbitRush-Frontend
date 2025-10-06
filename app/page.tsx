@@ -88,9 +88,8 @@ export default function Home() {
             )}
           </div>
           <div className="space-y-4 px-4">
-            {users.slice(3).map((user) => (
-              <Test user={user as ScoreUser} />
-            ))}
+            {users.length > 3 &&
+              users.slice(3).map((user) => <Test user={user as ScoreUser} />)}
           </div>
         </div>
       )}

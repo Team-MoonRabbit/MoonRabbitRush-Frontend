@@ -27,6 +27,29 @@ export default function ProtectedPage() {
   });
 
   useEffect(() => {
+    const fetchUsers = async () => {
+      const response = await fetch("/api/game/ranking", {
+        method: "GET",
+      });
+      const data = await response.json();
+
+      sendMessage(
+        "GameManager",
+        "SetRankingScore",
+        JSON.stringify({
+          first_score: data.at(0)?.score,
+          second_score: data.at(1)?.score,
+          third_score: data.at(2)?.score,
+        })
+      );
+    };
+
+    if (isLoaded) {
+      fetchUsers();
+    }
+  }, [isLoaded]);
+
+  useEffect(() => {
     const onMsg = async (e: MessageEvent) => {
       if (e.data?.type === "GAME_OVER_JSON") {
         const data = JSON.parse(e.data.payload);
@@ -42,8 +65,7 @@ export default function ProtectedPage() {
           }),
         });
 
-        // TODO
-        sendMessage("GameManager", "", "");
+        sendMessage("GameManager", "SetMaxScore", "1000000");
       }
     };
 
