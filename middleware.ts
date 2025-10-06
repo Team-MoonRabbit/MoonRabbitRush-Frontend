@@ -3,15 +3,15 @@ import { JwtResponse } from "./app/types/jwt";
 import { ResponseCookies } from "@edge-runtime/cookies";
 
 export async function middleware(request: NextRequest) {
-  const accessToken = request.cookies.get("accessToken")?.value;
-  const refreshToken = request.cookies.get("refreshToken")?.value;
+  try {
+    const accessToken = request.cookies.get("accessToken")?.value;
+    const refreshToken = request.cookies.get("refreshToken")?.value;
 
-  if (!accessToken && !refreshToken) {
-    return NextResponse.redirect(new URL("/auth/login", request.url));
-  }
+    if (!accessToken && !refreshToken) {
+      return NextResponse.redirect(new URL("/auth/login", request.url));
+    }
 
-  if (!accessToken && refreshToken) {
-    try {
+    if (!accessToken && refreshToken) {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/auth/reissue`,
         {
@@ -28,12 +28,17 @@ export async function middleware(request: NextRequest) {
       const headers = new Headers();
       const responseCookies = new ResponseCookies(headers);
 
+      console.log(data.accessToken);
+      console.log(data.accessTokenExpiredAt);
       responseCookies.set("accessToken", data.accessToken, {
         httpOnly: true,
         sameSite: "strict",
         secure: process.env.NODE_ENV === "production",
         expires: new Date(data.accessTokenExpiredAt),
       });
+
+      console.log(data.refreshToken);
+      console.log(data.refreshTokenExpiredAt);
       responseCookies.set("refreshToken", data.refreshToken, {
         httpOnly: true,
         sameSite: "strict",
@@ -44,10 +49,10 @@ export async function middleware(request: NextRequest) {
       return NextResponse.next({
         headers: headers,
       });
-    } catch (e) {
-      console.log(e);
-      return NextResponse.redirect(new URL("/auth/login", request.url));
     }
+  } catch (e) {
+    console.log(e);
+    return NextResponse.redirect(new URL("/auth/login", request.url));
   }
 
   return NextResponse.next();
