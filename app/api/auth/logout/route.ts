@@ -14,9 +14,11 @@ export async function POST(request: NextRequest) {
       });
     }
   } finally {
-    cookieStore.delete("accessToken");
-    cookieStore.delete("refreshToken");
+    const response = NextResponse.next();
 
-    return new NextResponse();
+    response.cookies.delete("accessToken");
+    response.cookies.delete("refreshToken");
+
+    return response;
   }
 }
