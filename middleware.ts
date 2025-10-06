@@ -17,7 +17,7 @@ export async function middleware(request: NextRequest) {
         {
           method: "POST",
           headers: {
-            "Refresh-Token": `${refreshToken}`,
+            "Refresh-Token": `Bearer ${refreshToken}`,
             "ngrok-skip-browser-warning": "true",
             "Content-Type": "application/json",
           },
