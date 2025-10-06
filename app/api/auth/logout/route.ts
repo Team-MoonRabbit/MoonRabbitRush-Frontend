@@ -14,7 +14,12 @@ export async function POST(request: NextRequest) {
       });
     }
   } finally {
-    const response = NextResponse.next();
+    const response = new NextResponse(undefined, {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
     response.cookies.delete("accessToken");
     response.cookies.delete("refreshToken");

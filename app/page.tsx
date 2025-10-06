@@ -52,29 +52,33 @@ function Test({ index }: { index: number }) {
 
 export default function Home() {
   return (
-    <main className="grid h-full px-4">
-      <div className="mt-24 text-white space-y-5 overflow-y-auto">
-        <div className="flex">
-          <div className="mx-auto">
-            <TestFirst />
+    <main className="grid h-full">
+      <div className="mt-16 text-white space-y-5 overflow-y-auto">
+        <div className="bg-[#26262699] py-8">
+          <div className="flex">
+            <div className="mx-auto">
+              <TestFirst />
+            </div>
+          </div>
+          <div className="grid grid-cols-2">
+            <TestSecond />
+            <TestThird />
           </div>
         </div>
-        <div className="grid grid-cols-2 mb-12">
-          <TestSecond />
-          <TestThird />
+        <div className="space-y-4 px-4">
+          <Test index={4} />
+          <Test index={5} />
+          <Test index={6} />
+          <Test index={7} />
+          <Test index={8} />
+          <Test index={9} />
+          <Test index={10} />
+          <Test index={11} />
+          <Test index={12} />
+          <Test index={13} />
         </div>
-        <Test index={4} />
-        <Test index={5} />
-        <Test index={6} />
-        <Test index={7} />
-        <Test index={8} />
-        <Test index={9} />
-        <Test index={10} />
-        <Test index={11} />
-        <Test index={12} />
-        <Test index={13} />
       </div>
-      <footer className="text-center py-2 mt-auto">
+      <footer className="text-center py-2 mt-auto px-4">
         <Link href={"/game"} prefetch={false}>
           <button className="w-full py-3 bg-amber-900 text-white rounded-md">
             게임 시작하기
