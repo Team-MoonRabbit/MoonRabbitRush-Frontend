@@ -75,7 +75,7 @@ export default function Home() {
           <div className="bg-[#26262699] py-8">
             <div className="flex">
               <div
-                className={`mx-auto grid grid-cols-2 ${
+                className={`mx-auto grid w-full ${
                   users.length === 2 ? "grid-cols-2" : "grid-cols-1"
                 }`}
               >
