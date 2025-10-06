@@ -74,9 +74,16 @@ export default function Home() {
         <div className="mt-16 text-white space-y-5 overflow-y-auto">
           <div className="bg-[#26262699] py-8">
             <div className="flex">
-              <div className="mx-auto">
+              <div
+                className={`mx-auto grid grid-cols-2 ${
+                  users.length === 2 ? "grid-cols-2" : "grid-cols-1"
+                }`}
+              >
                 {users.length > 0 && (
                   <TestFirst user={users?.at(0) as ScoreUser} />
+                )}
+                {users.length == 2 && (
+                  <TestSecond user={users.at(1) as ScoreUser} />
                 )}
               </div>
             </div>
