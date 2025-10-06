@@ -33,7 +33,13 @@ export default function ProtectedPage() {
         const score = Number(data.score);
         console.log(score + "asdkflhasjklfh");
 
-        encryptText(score.toString());
+        const encryptedScore = encryptText(score.toString());
+        await fetch(`/api/game/score`, {
+          method: "POST",
+          body: JSON.stringify({
+            score: encryptedScore,
+          }),
+        });
       }
     };
 
