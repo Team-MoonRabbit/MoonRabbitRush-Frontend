@@ -19,3 +19,9 @@ export interface User {
   updated_at?: string;
   deleted_at?: string;
 }
+
+export interface ScoreUser {
+  rank: number;
+  email: string;
+  score: number;
+}
