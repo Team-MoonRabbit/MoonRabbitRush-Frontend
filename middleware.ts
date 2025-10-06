@@ -1,29 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { JwtResponse } from "./app/types/jwt";
-import {
-  RequestCookies,
-  ResponseCookies,
-} from "next/dist/compiled/@edge-runtime/cookies";
-import { ErrorResponse } from "./app/types/error";
-
-function applySetCookie(req: NextRequest, res: NextResponse): void {
-  const setCookies = new ResponseCookies(res.headers);
-
-  const newReqHeaders = new Headers(req.headers);
-  const newReqCookies = new RequestCookies(newReqHeaders);
-  setCookies.getAll().forEach((cookie) => newReqCookies.set(cookie));
-
-  NextResponse.next({
-    request: { headers: newReqHeaders },
-  }).headers.forEach((value, key) => {
-    if (
-      key === "x-middleware-override-headers" ||
-      key.startsWith("x-middleware-request-")
-    ) {
-      res.headers.set(key, value);
-    }
-  });
-}
 
 export async function middleware(request: NextRequest) {
   try {
@@ -47,31 +22,20 @@ export async function middleware(request: NextRequest) {
         }
       );
       const data = await response.json();
-      const nextResponse = NextResponse.next();
+      const nextResponse = NextResponse.redirect(new URL("/", request.url));
 
-      if (!response.ok) {
-        nextResponse.cookies.set("data", data, {
-          httpOnly: true,
-          sameSite: "strict",
-          secure: process.env.NODE_ENV === "production",
-          expires: 1000 * 60 * 60 * 24,
-        });
-      } else {
-        nextResponse.cookies.set("accessToken", data.accessToken, {
-          httpOnly: true,
-          sameSite: "strict",
-          secure: process.env.NODE_ENV === "production",
-          expires: new Date(data.accessTokenExpiredAt),
-        });
-        nextResponse.cookies.set("refreshToken", data.refreshToken, {
-          httpOnly: true,
-          sameSite: "strict",
-          secure: process.env.NODE_ENV === "production",
-          expires: new Date(data.refreshTokenExpiredAt),
-        });
-      }
-
-      applySetCookie(request, nextResponse);
+      nextResponse.cookies.set("accessToken", data.accessToken, {
+        httpOnly: true,
+        sameSite: "strict",
+        secure: process.env.NODE_ENV === "production",
+        expires: new Date(data.accessTokenExpiredAt),
+      });
+      nextResponse.cookies.set("refreshToken", data.refreshToken, {
+        httpOnly: true,
+        sameSite: "strict",
+        secure: process.env.NODE_ENV === "production",
+        expires: new Date(data.refreshTokenExpiredAt),
+      });
 
       return nextResponse;
     }
