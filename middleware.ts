@@ -1,4 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
 
 export async function middleware(request: NextRequest) {
   try {
@@ -22,19 +25,29 @@ export async function middleware(request: NextRequest) {
         }
       );
       const data = await response.json();
+
+      dayjs.extend(utc);
+      dayjs.extend(timezone);
+
       const nextResponse = NextResponse.redirect(new URL("/", request.url));
 
       nextResponse.cookies.set("accessToken", data.accessToken, {
         httpOnly: true,
         sameSite: "strict",
         secure: process.env.NODE_ENV === "production",
-        expires: new Date(data.accessTokenExpiredAt),
+        expires: dayjs
+          .tz(data.accessTokenExpiredAt, "Asia/Seoul")
+          .utc()
+          .toDate(),
       });
       nextResponse.cookies.set("refreshToken", data.refreshToken, {
         httpOnly: true,
         sameSite: "strict",
         secure: process.env.NODE_ENV === "production",
-        expires: new Date(data.refreshTokenExpiredAt),
+        expires: dayjs
+          .tz(data.refreshTokenExpiredAt, "Asia/Seoul")
+          .utc()
+          .toDate(),
       });
 
       return nextResponse;
