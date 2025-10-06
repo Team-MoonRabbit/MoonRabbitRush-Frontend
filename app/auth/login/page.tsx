@@ -1,7 +1,7 @@
 "use client";
 
 import GoogleLoginButton from "@/components/google-login-button";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { useCallback, useEffect } from "react";
 import { toast } from "sonner";
 
@@ -12,6 +12,8 @@ export default function Page({
     error?: string;
   }>;
 }) {
+  const router = useRouter();
+
   useEffect(() => {
     const validateEmail = async () => {
       if ((await searchParams).error === "invalid-email") {
@@ -33,7 +35,7 @@ export default function Page({
       }
     );
     const data = await response.text();
-    redirect(data);
+    router.push(data);
   }, []);
 
   return (
