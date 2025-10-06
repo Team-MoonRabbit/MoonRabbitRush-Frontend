@@ -1,12 +1,14 @@
 "use client";
 
-import { redirect } from "next/navigation";
 import { DoorClosed } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export function LogoutButton() {
+  const router = useRouter();
+
   const logout = async () => {
     await fetch("/api/auth/logout", { method: "POST" });
-    redirect("/auth/login");
+    router.push("/auth/login");
   };
 
   return (
