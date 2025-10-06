@@ -5,7 +5,7 @@ import { DoorClosed } from "lucide-react";
 
 export function LogoutButton() {
   const logout = async () => {
-    fetch("/api/auth/logout", { method: "POST" });
+    await fetch("/api/auth/logout", { method: "POST" });
     redirect("/auth/login");
   };
 
