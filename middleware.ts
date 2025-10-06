@@ -29,13 +29,13 @@ export async function middleware(request: NextRequest) {
 
       nextResponse.cookies.set("accessToken", data.accessToken, {
         httpOnly: true,
-        sameSite: "lax",
+        sameSite: "strict",
         secure: process.env.NODE_ENV === "production",
         expires: new Date(data.accessTokenExpiredAt),
       });
       nextResponse.cookies.set("refreshToken", data.refreshToken, {
         httpOnly: true,
-        sameSite: "lax",
+        sameSite: "strict",
         secure: process.env.NODE_ENV === "production",
         expires: new Date(data.refreshTokenExpiredAt),
       });
