@@ -52,14 +52,6 @@ export async function middleware(request: NextRequest) {
 
       return nextResponse;
     }
-
-    if (
-      accessToken &&
-      refreshToken &&
-      request.nextUrl.pathname.startsWith("/auth/login")
-    ) {
-      return NextResponse.redirect(new URL("/", request.url));
-    }
   } catch (e) {
     console.log(e);
     return NextResponse.redirect(new URL("/auth/login", request.url));
