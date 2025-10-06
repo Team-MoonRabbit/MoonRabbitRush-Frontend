@@ -1,12 +1,13 @@
 "use client";
 
 import ProgressBar from "@/components/progress-bar";
-import { useEffect } from "react";
+import { encryptText } from "@/app/game/actions";
+import { useEffect, useState } from "react";
 import { Unity, useUnityContext } from "react-unity-webgl";
 
 declare global {
   interface Window {
-    receiveFromUnity?: (message: string) => void;
+    OnGameOverJSON?: (score: number) => void;
   }
 }
 
@@ -14,8 +15,8 @@ export default function ProtectedPage() {
   const {
     unityProvider,
     sendMessage,
-    // addEventListener,
-    // removeEventListener,
+    addEventListener,
+    removeEventListener,
     isLoaded,
     loadingProgression,
   } = useUnityContext({
@@ -26,22 +27,19 @@ export default function ProtectedPage() {
   });
 
   useEffect(() => {
-    window.receiveFromUnity = (message: string) => {
-      console.log(message);
+    const onMsg = async (e: MessageEvent) => {
+      if (e.data?.type === "GAME_OVER_JSON") {
+        const data = JSON.parse(e.data.payload);
+        const score = Number(data.score);
+        console.log(score + "asdkflhasjklfh");
+
+        encryptText(score.toString());
+      }
     };
 
-    return () => {
-      delete window.receiveFromUnity;
-    };
+    window.addEventListener("message", onMsg);
+    return () => window.removeEventListener("message", onMsg);
   }, []);
-
-  useEffect(() => {
-    sendMessage(
-      "UnityToReactTest",
-      "ReceiveFromReact",
-      "eyasdfasfa.fdsfa.fda.daf"
-    );
-  }, [sendMessage]);
 
   return (
     <div className="w-full h-full grid relative">
