@@ -1,4 +1,3 @@
-import axios from "axios";
 import { NextRequest, NextResponse } from "next/server";
 import { JwtResponse } from "./app/types/jwt";
 
@@ -31,22 +30,17 @@ export async function middleware(request: NextRequest) {
         httpOnly: true,
         sameSite: "strict",
         secure: process.env.NODE_ENV === "production",
-        domain: process.env.NEXT_PUBLIC_COOKIE_DOMAIN,
         expires: new Date(data.accessTokenExpiredAt),
       });
       nextResponse.cookies.set("refreshToken", data.refreshToken, {
         httpOnly: true,
         sameSite: "strict",
         secure: process.env.NODE_ENV === "production",
-        domain: process.env.NEXT_PUBLIC_COOKIE_DOMAIN,
         expires: new Date(data.refreshTokenExpiredAt),
       });
 
       return nextResponse;
     } catch (e) {
-      if (axios.isAxiosError(e)) {
-        console.log(e.response?.data);
-      }
       return NextResponse.redirect(new URL("/auth/login", request.url));
     }
   }

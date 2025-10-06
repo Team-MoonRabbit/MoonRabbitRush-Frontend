@@ -2,13 +2,12 @@
 
 import { useRouter } from "next/navigation";
 import { DoorClosed } from "lucide-react";
-import axios from "axios";
 
 export function LogoutButton() {
   const router = useRouter();
 
   const logout = async () => {
-    await axios.post(`/api/auth/logout`);
+    await fetch("/api/auth/logout", { method: "POST" });
     router.push("/auth/login");
   };
 

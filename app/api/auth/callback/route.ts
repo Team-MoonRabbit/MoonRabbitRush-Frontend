@@ -1,6 +1,4 @@
 import { NextResponse } from "next/server";
-import axios from "axios";
-import { cookies } from "next/headers";
 import { JwtResponse } from "@/app/types/jwt";
 
 export async function GET(request: Request) {
@@ -42,9 +40,7 @@ export async function GET(request: Request) {
 
       return nextResponse;
     } catch (e) {
-      if (axios.isAxiosError(e)) {
-        console.log(e.response?.data);
-      }
+      console.log(e);
     }
   }
 
