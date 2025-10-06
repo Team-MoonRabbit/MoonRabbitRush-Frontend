@@ -36,7 +36,7 @@ export default function RootLayout({
                 <Home />
               </Link>
             </div>
-            <div className="ml-auto flex items-center gap-x-1">
+            <div className="ml-auto flex items-center gap-x-1 select-none">
               <LogoutButton />
             </div>
           </div>
