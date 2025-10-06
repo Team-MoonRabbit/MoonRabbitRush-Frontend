@@ -21,7 +21,7 @@ export default function Page({
     };
 
     fetchParams();
-  }, []);
+  }, [params, router]);
 
   const onLogin = useCallback(async () => {
     const response = await fetch(
