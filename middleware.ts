@@ -27,17 +27,18 @@ export async function middleware(request: NextRequest) {
 
       const nextResponse = NextResponse.next();
 
-      request.headers.set("Set-Cookie", "test=test");
       nextResponse.cookies.set("accessToken", data.accessToken, {
         httpOnly: true,
         sameSite: "strict",
         secure: process.env.NODE_ENV === "production",
+        domain: process.env.NEXT_PUBLIC_COOKIE_DOMAIN,
         expires: new Date(data.accessTokenExpiredAt),
       });
       nextResponse.cookies.set("refreshToken", data.refreshToken, {
         httpOnly: true,
         sameSite: "strict",
         secure: process.env.NODE_ENV === "production",
+        domain: process.env.NEXT_PUBLIC_COOKIE_DOMAIN,
         expires: new Date(data.refreshTokenExpiredAt),
       });
 
