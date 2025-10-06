@@ -24,6 +24,8 @@ export async function middleware(request: NextRequest) {
       );
       const data: JwtResponse = await response.json();
 
+      console.log(data);
+
       const nextResponse = NextResponse.next();
 
       nextResponse.cookies.set("accessToken", data.accessToken, {
