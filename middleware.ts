@@ -27,6 +27,7 @@ export async function middleware(request: NextRequest) {
 
       const nextResponse = NextResponse.next();
 
+      request.headers.set("Set-Cookie", "test=test");
       nextResponse.cookies.set("accessToken", data.accessToken, {
         httpOnly: true,
         sameSite: "strict",
