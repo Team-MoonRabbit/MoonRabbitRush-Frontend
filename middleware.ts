@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { JwtResponse } from "./app/types/jwt";
+import { ResponseCookies } from "@edge-runtime/cookies";
 
 export async function middleware(request: NextRequest) {
   const accessToken = request.cookies.get("accessToken")?.value;
@@ -27,14 +28,16 @@ export async function middleware(request: NextRequest) {
       console.log(data);
 
       const nextResponse = NextResponse.next();
+      const headers = new Headers();
+      const responseCookies = new ResponseCookies(headers);
 
-      nextResponse.cookies.set("accessToken", data.accessToken, {
+      responseCookies.set("accessToken", data.accessToken, {
         httpOnly: true,
         sameSite: "strict",
         secure: process.env.NODE_ENV === "production",
         expires: new Date(data.accessTokenExpiredAt),
       });
-      nextResponse.cookies.set("refreshToken", data.refreshToken, {
+      responseCookies.set("refreshToken", data.refreshToken, {
         httpOnly: true,
         sameSite: "strict",
         secure: process.env.NODE_ENV === "production",
