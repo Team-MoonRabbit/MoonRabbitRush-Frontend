@@ -27,7 +27,6 @@ export async function middleware(request: NextRequest) {
 
       console.log(data);
 
-      const nextResponse = NextResponse.next();
       const headers = new Headers();
       const responseCookies = new ResponseCookies(headers);
 
@@ -44,7 +43,9 @@ export async function middleware(request: NextRequest) {
         expires: new Date(data.refreshTokenExpiredAt),
       });
 
-      return nextResponse;
+      return NextResponse.next({
+        headers: headers,
+      });
     } catch (e) {
       return NextResponse.redirect(new URL("/auth/login", request.url));
     }
