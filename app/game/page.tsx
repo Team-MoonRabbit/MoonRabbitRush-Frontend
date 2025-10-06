@@ -48,6 +48,13 @@ export default function ProtectedPage() {
           method: "GET",
         });
         const data = await response.json();
+        console.log(
+          JSON.stringify({
+            first_score: data.at(0)?.score,
+            second_score: data.at(1)?.score,
+            third_score: data.at(2)?.score,
+          })
+        );
 
         sendMessage(
           "GameManager",
