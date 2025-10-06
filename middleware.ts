@@ -46,6 +46,8 @@ export async function middleware(request: NextRequest) {
         expires: new Date(data.refreshTokenExpiredAt),
       });
 
+      console.log(headers.getSetCookie());
+
       return NextResponse.next({
         headers: headers,
       });
