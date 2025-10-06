@@ -13,7 +13,7 @@ const pretendard = LocalFont({
 });
 
 export const metadata: Metadata = {
-  title: "Moon And Rush",
+  title: "MoonRabbitRush",
   description: "끝없이 이어지는 계단을 올라 달까지 닿는 토끼의 여정",
 };
 
