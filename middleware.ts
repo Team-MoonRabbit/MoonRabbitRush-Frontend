@@ -43,6 +43,12 @@ export async function middleware(request: NextRequest) {
         expires: new Date(data.refreshTokenExpiredAt),
       });
 
+      console.log(
+        NextResponse.next({
+          headers: headers,
+        })
+      );
+
       return NextResponse.next({
         headers: headers,
       });
