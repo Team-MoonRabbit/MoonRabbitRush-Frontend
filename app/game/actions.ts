@@ -1,5 +1,6 @@
 "use server";
 
+import { serverInstance } from "@/lib/ky";
 import crypto from "crypto";
 import { cookies } from "next/headers";
 
@@ -20,17 +21,11 @@ export async function encryptText(text: string) {
     encrypted += cipher.final("base64");
 
     if (accessToken) {
-      await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/game/score`, {
-        method: "POST",
+      await serverInstance.post(`/game/score`, {
         body: JSON.stringify({
           score: encrypted,
           iv: iv.toString("base64"),
         }),
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          "ngrok-skip-browser-warning": "true",
-          "Content-Type": "application/json",
-        },
       });
     }
   } catch (e) {
