@@ -6,9 +6,6 @@ import { cookies } from "next/headers";
 
 export async function encryptText(text: string) {
   try {
-    const cookieStore = await cookies();
-    const accessToken = cookieStore.get("accessToken")?.value;
-
     const keyBase64 = process.env.GAME_AES_KEY as string;
     const key = Buffer.from(keyBase64, "base64");
     if (key.length !== 32)
@@ -20,14 +17,12 @@ export async function encryptText(text: string) {
     let encrypted = cipher.update(text, "utf8", "base64");
     encrypted += cipher.final("base64");
 
-    if (accessToken) {
-      await serverInstance.post(`/game/score`, {
-        body: JSON.stringify({
-          score: encrypted,
-          iv: iv.toString("base64"),
-        }),
-      });
-    }
+    await serverInstance.post(`/game/score`, {
+      body: JSON.stringify({
+        score: encrypted,
+        iv: iv.toString("base64"),
+      }),
+    });
   } catch (e) {
     console.log(e);
   }
