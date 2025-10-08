@@ -30,15 +30,7 @@ export default function ProtectedPage() {
         const data = JSON.parse(e.data.payload);
         const score = Number(data.score);
 
-        const encryptedScore = await encryptText(score.toString());
-
-        await fetch(`/api/game/score`, {
-          method: "POST",
-          body: JSON.stringify({
-            score: encryptedScore?.score,
-            iv: encryptedScore?.iv,
-          }),
-        });
+        await encryptText(score.toString());
       }
     };
 
